@@ -31,14 +31,9 @@ async def get_posts():
     return {"data": my_post_list}
 
 
-# @app.post("/createpost")
 @app.post("/posts")
-# def createpost(payload: dict = Body(...)):
-def createpost(post: Post):
-    # print(payload)
-    # return {"nes_post": f"title: {payload['title']} content: {payload['content']}"}
-    # print(post.rating)
-    #print(post)
-    #print(post.dict())
-    my_post_list.append(post.dict())
-    return {"data": post}
+def create_post(post: Post):
+    post_dict = post.dict()
+    post_dict['id'] = randrange(0, 1000000)
+    my_post_list.append(post_dict)    
+    return {"data": post_dict}
