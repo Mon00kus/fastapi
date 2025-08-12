@@ -1,5 +1,6 @@
+from ast import While
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -44,14 +45,11 @@ def create_post(post: Post):
     my_post_list.append(post_dict)
     return {"data": post_dict}
 
-# Just for demotraiting porpurse
-#@app.get("/post/latest")
-#def get_latest_post():
-    #post = my_post_list[len(my_post_list)-1]
-    #return {"detail": post}
 
 @app.get("/posts/{id}")
-def create_posts(id: int):
-    # print(id)
+def create_posts(id: int, response: Response):
     post = find_post(id)
+    if not post:      
+      response.status_code = status.HTTP_404_NOT_FOUND
+      return {"message": f"post with id: {id} was not found"}
     return {"post_detail": post}
