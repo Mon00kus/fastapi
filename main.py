@@ -21,13 +21,19 @@ my_post_list = [
 ]
 
 
+def find_post(id):
+    for post in my_post_list:
+        if post["id"] == id:
+            return post
+
+
 @app.get("/")
-async def root():
+def root():
     return {"message": "Hello World"}
 
 
 @app.get("/posts")
-async def get_posts():
+def get_posts():
     return {"data": my_post_list}
 
 
@@ -35,5 +41,17 @@ async def get_posts():
 def create_post(post: Post):
     post_dict = post.dict()
     post_dict['id'] = randrange(0, 1000000)
-    my_post_list.append(post_dict)    
+    my_post_list.append(post_dict)
     return {"data": post_dict}
+
+# Just for demotraiting porpurse
+#@app.get("/post/latest")
+#def get_latest_post():
+    #post = my_post_list[len(my_post_list)-1]
+    #return {"detail": post}
+
+@app.get("/posts/{id}")
+def create_posts(id: int):
+    # print(id)
+    post = find_post(id)
+    return {"post_detail": post}
